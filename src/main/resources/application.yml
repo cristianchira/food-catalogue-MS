@@ -1,0 +1,79 @@
+server:
+  port: 9092
+  # 1. install openSSH on windows
+      # keytool comes with JDK so should be available
+      # check if keytool is available keytool -help
+  # To generate a keystore( PowerShell) with a private key in the specified directory
+  # (C:\Programming\Intellij\foodcatalogue\src\main\resources),
+  # you can use the keytool command provided by Java. Open your command prompt and navigate to the
+  # directory where you want to create the keystore, then run the following command:
+  # cd C:\Programming\Intellij\foodcatalogue\src\main\resources
+
+      # keytool -genkeypair -alias mykeyalias -keyalg RSA -keysize 2048 -keystore keystore.jks -storepass your-password-here
+
+  # Replace your-password-here with the password you want to set for the keystore.
+  # This will generate a new keystore.jks file in the specified directory containing a private key.
+  # password is : 136413
+  #What is your first and last name?
+  #  [Unknown]:  Cristian Chira
+  #What is the name of your organizational unit?
+  #  [Unknown]:  Biostil
+  #What is the name of your organization?
+  #  [Unknown]:  Bio
+  #What is the name of your City or Locality?
+  #  [Unknown]:  Bucharest
+  #What is the name of your State or Province?
+  #  [Unknown]:  Bucharest
+  #What is the two-letter country code for this unit?
+  #  [Unknown]:  RO
+  #Is CN=Cristian Chira, OU=Biostil, O=Bio, L=Bucharest, ST=Bucharest, C=RO correct?
+  #  [no]:  yes
+  #
+  #Generating 2,048 bit RSA key pair and self-signed certificate (SHA256withRSA) with a validity of 90 days
+  #        for: CN=Cristian Chira, OU=Biostil, O=Bio, L=Bucharest, ST=Bucharest, C=RO
+
+  # If you already have a private key stored in a keystore.jks file, you can use the Java keytool
+  # utility to export the corresponding public key. Here's a command that you can run to export the
+  # public key into a file:
+
+     # keytool -export -keystore C:\Programming\Intellij\foodcatalogue\src\main\resources\keystore.jks -alias mykeyalias -file public_key.crt
+
+  # convert this public_key.crt to PEM format (which is often used), you can use the openssl
+  # command like this:
+
+    # openssl x509 -inform der -in public_key.crt -out public_key.pem
+
+  # On Windows, you can use the setx command to set environment variables:
+
+      # setx KEY_STORE_PASSWORD "mysecretpassword"
+      # password is 136413
+
+  # KEY_STORE_PASSWORD:
+      # This is the name of the environment variable you are setting.
+  # "136413":
+      # This is the value that you are setting for the KEY_STORE_PASSWORD environment variable.
+  # Once this command is executed, the KEY_STORE_PASSWORD environment variable will be set to "136413"
+  # for the user running the command. You'll need to restart any command prompts or applications
+  # to pick up the new environment variable.
+
+  # In the context of a Spring Boot application, ${KEY_STORE_PASSWORD} in application.yaml
+  # would be replaced at runtime by the value "136413", which you've set as an environment variable.
+  # This way, the sensitive data (in this case, the keystore password) is kept outside of the codebase,
+  # adding an extra layer of security.
+#
+#  ssl:
+#    key-store: classpath:keystore.jks
+#    key-store-password: 136413
+#    key-store-type: JKS
+spring:
+  profiles:
+    active: dev
+  application:
+    name: FOOD-CATALOGUE-SERVICE
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    database-platform: org.hibernate.dialect.MySQL8Dialect
